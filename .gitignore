@@ -74,6 +74,10 @@ yarn-error.log
 !.yarn/sdks
 !.yarn/versions
 
+# Editor / local config
+.vscode/
+.idea/
+*.local.json
+
 # Custom ignores
-.claude/
 *.zip
