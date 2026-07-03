@@ -84,15 +84,17 @@ src/
 App.tsx          root navigator (Onboarding → Tabs → Lesson)
 ```
 
-## Notes
+## Assumptions & decisions
 
+- **Cross-platform sizing** – a few font sizes and image dimensions from the Figma file looked correct on iOS but broke on Android (text clipped, illustrations overflowing their cards). Rather than copy the Figma values blindly, I adjusted those sizes so the layouts hold up on both platforms. The design intent stays the same — only the sizes were tuned to render consistently on iOS and Android.
 - **Bare workflow** was chosen over Expo so the native font linking and platform folders are set up properly.
-- **Fonts** – Inter / Inter Display are bundled and linked on both platforms. They're applied with `fontFamily` (not `fontWeight`) so Android renders the right weights.
+- **Fonts** – Inter / Inter Display are bundled and linked on both platforms.
 - **Styling** – everything goes through `StyleSheet` with shared tokens from `src/theme`; no inline styles and no hard-coded colors in the screens.
 - **Navigation** – native stack for the top-level flow, bottom tabs for the four main sections. Route params are fully typed.
 - **State** – local component state only. The app is presentational, so a global store would be overkill here.
 - **Dark mode** – the whole app (screens and chrome) responds to the system color scheme.
 - **Lesson states** – done, current, locked and the faded preview row are all handled.
+- **Profile screen** – wasn't in the Figma file; added so the fourth tab isn't empty and to give the log-out flow a home.
 
 ## Scripts
 
