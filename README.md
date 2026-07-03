@@ -94,7 +94,8 @@ App.tsx          root navigator (Onboarding → Tabs → Lesson)
 - **State** – local component state only. The app is presentational, so a global store would be overkill here.
 - **Dark mode** – the whole app (screens and chrome) responds to the system color scheme.
 - **Lesson states** – done, current, locked and the faded preview row are all handled.
-- **Profile screen** – wasn't in the Figma file; added so the fourth tab isn't empty and to give the log-out flow a home.
+- **Profile screen** – the bottom tab bar includes a Profile item, but the Figma file had no matching screen for it. I built the Profile screen so the tab isn't a dead end and to give the log-out flow a proper home.
+- **Notification & Language settings** – both are handled with dropdowns (notification preference and app language), so the options stay compact and the selection state is clear.
 
 ## Scripts
 
