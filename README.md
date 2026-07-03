@@ -2,6 +2,8 @@
 
 A kids' learning app built from a Figma design with React Native (bare workflow) and TypeScript. Runs on both iOS and Android.
 
+**Stack:** React Native 0.86 · TypeScript · React Navigation · react-native-svg
+
 ## Screens
 
 - **Onboarding** – logo, floating feature cards, a swipeable "Personalized Learning" hero, Sign up / Log in
