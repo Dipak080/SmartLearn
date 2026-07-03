@@ -19,22 +19,22 @@ Full-resolution captures live in [`screenshot/`](screenshot) — one folder per 
 ### iOS
 
 | Onboarding | Home | Lesson |
-|---|---|---|
-| ![Onboarding](screenshot/ios/Onboarding%20Screen.jpeg) | ![Home](screenshot/ios/Home%20Screen1.jpeg) | ![Lesson](screenshot/ios/Lesson%20Screen.jpeg) |
+|:---:|:---:|:---:|
+| <img src="screenshot/ios/Onboarding%20Screen.jpeg" width="200" /> | <img src="screenshot/ios/Home%20Screen1.jpeg" width="200" /> | <img src="screenshot/ios/Lesson%20Screen.jpeg" width="200" /> |
 
 | Analytics | Profile |
-|---|---|
-| ![Analytics](screenshot/ios/Analytics%20Screen.jpeg) | ![Profile](screenshot/ios/Profile%20Screen.jpeg) |
+|:---:|:---:|
+| <img src="screenshot/ios/Analytics%20Screen.jpeg" width="200" /> | <img src="screenshot/ios/Profile%20Screen.jpeg" width="200" /> |
 
 ### Android
 
 | Onboarding | Home | Lesson |
-|---|---|---|
-| ![Onboarding](screenshot/Android/Onboarding%20Screen.jpeg) | ![Home](screenshot/Android/Home%20Screen1.jpeg) | ![Lesson](screenshot/Android/Lesson%20Screen.jpeg) |
+|:---:|:---:|:---:|
+| <img src="screenshot/Android/Onboarding%20Screen.jpeg" width="200" /> | <img src="screenshot/Android/Home%20Screen1.jpeg" width="200" /> | <img src="screenshot/Android/Lesson%20Screen.jpeg" width="200" /> |
 
 | Analytics | Profile |
-|---|---|
-| ![Analytics](screenshot/Android/Analytics%20Screen.jpeg) | ![Profile](screenshot/Android/Profile%20Screen.jpeg) |
+|:---:|:---:|
+| <img src="screenshot/Android/Analytics%20Screen.jpeg" width="200" /> | <img src="screenshot/Android/Profile%20Screen.jpeg" width="200" /> |
 
 ## Getting started
 
