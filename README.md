@@ -92,7 +92,6 @@ App.tsx          root navigator (Onboarding → Tabs → Lesson)
 - **Styling** – everything goes through `StyleSheet` with shared tokens from `src/theme`; no inline styles and no hard-coded colors in the screens.
 - **Navigation** – native stack for the top-level flow, bottom tabs for the four main sections. Route params are fully typed.
 - **State** – local component state only. The app is presentational, so a global store would be overkill here.
-- **Dark mode** – the whole app (screens and chrome) responds to the system color scheme.
 - **Lesson states** – done, current, locked and the faded preview row are all handled.
 - **Profile screen** – the bottom tab bar includes a Profile item, but the Figma file had no matching screen for it. I built the Profile screen so the tab isn't a dead end and to give the log-out flow a proper home.
 - **Notification & Language settings** – both are handled with dropdowns (notification preference and app language), so the options stay compact and the selection state is clear.
