@@ -15,6 +15,7 @@ export default function SelectableChip({ label, icon, active = false, count, onP
   const { colors } = useAppTheme();
   const styles = useStyles(colors);
   const scaleAnim = React.useRef(new Animated.Value(1)).current;
+  const animatedScale = { transform: [{ scale: scaleAnim }] };
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
@@ -38,7 +39,7 @@ export default function SelectableChip({ label, icon, active = false, count, onP
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
     >
-      <Animated.View style={[styles.chip, active && styles.chipActive, { transform: [{ scale: scaleAnim }] }]}>
+      <Animated.View style={[styles.chip, active && styles.chipActive, animatedScale]}>
         {icon !== undefined && <View style={styles.icon}>{icon}</View>}
         <Text style={[styles.label, active && styles.labelActive]}>{label}</Text>
         {count !== undefined && (
@@ -55,39 +56,45 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
     borderWidth: 1,
-    borderColor: colors.textMuted,
-    borderRadius: radius.pill,
-    paddingHorizontal: 16,
+    borderColor: colors.border,
+    borderRadius: 56,
     paddingVertical: 6,
-    minHeight: 46,
+    paddingHorizontal: 15,
+    minHeight: 44,
     marginRight: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: colors.white,
   },
   chipActive: {
-    backgroundColor: colors.navy,
-    borderColor: colors.navy,
+    backgroundColor: colors.navyDeep,
+    borderColor: colors.navyDeep,
   },
   icon: {
     marginRight: 6,
   },
   label: {
     color: colors.navy,
-    fontFamily: fonts.medium,
-    fontSize: 14,
+    fontFamily: fonts.interMedium,
+    fontSize: 12,
+    lineHeight: 18,
+    letterSpacing: -0.13,
+    textAlign: 'center',
   },
   labelActive: {
     color: colors.white,
   },
   count: {
     marginLeft: 10,
-    marginRight: -8,
+    marginRight: -4,
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: colors.chipBg,
+    backgroundColor: colors.chipCountBg,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
+    overflow: 'hidden',
   },
   countActive: {
     backgroundColor: colors.white,

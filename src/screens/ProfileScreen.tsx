@@ -27,6 +27,12 @@ const ROWS: ProfileRow[] = [
   { label: 'Help & support', icon: chatSvg },
 ];
 
+const STATS = [
+  { label: 'Lessons', value: '48' },
+  { label: 'Day streak', value: '12' },
+  { label: 'Badges', value: '7' },
+];
+
 export default function ProfileScreen({ navigation }: Props) {
   const { colors } = useAppTheme();
   const styles = useStyles(colors);
@@ -50,12 +56,22 @@ export default function ProfileScreen({ navigation }: Props) {
         <View style={styles.hero}>
           <View style={styles.avatarContainer}>
             <Image
-              source={require('../assets/avatar.png')}
+              source={require('../assets/profiles.png')}
               style={styles.avatar}
               resizeMode="cover"
             />
           </View>
           <Text style={styles.name}>Max Johnson</Text>
+          <Text style={styles.email}>max.johnson@smartlearn.app</Text>
+        </View>
+
+        <View style={styles.statsRow}>
+          {STATS.map((stat) => (
+            <View key={stat.label} style={styles.statCard}>
+              <Text style={styles.statValue}>{stat.value}</Text>
+              <Text style={styles.statLabel}>{stat.label}</Text>
+            </View>
+          ))}
         </View>
 
         <View style={styles.list}>
@@ -137,10 +153,11 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     borderBottomRightRadius: 40,
   },
   title: {
-    fontSize: 30,
+    fontSize: 26,
     fontFamily: fonts.medium,
     color: colors.white,
-    marginHorizontal: spacing.xl,
+    letterSpacing: -0.29,
+    marginHorizontal: spacing.md,
     marginTop: spacing.xl,
   },
   hero: {
@@ -167,14 +184,53 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     borderColor: colors.white,
   },
   name: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: fonts.medium,
     color: colors.white,
+    letterSpacing: -0.24,
     marginTop: spacing.lg,
   },
+  email: {
+    fontSize: 13,
+    fontFamily: fonts.regular,
+    color: 'rgba(255,255,255,0.6)',
+    letterSpacing: -0.14,
+    marginTop: spacing.xs,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    marginHorizontal: spacing.md,
+    marginTop: 28,
+    gap: 10,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    paddingVertical: spacing.lg,
+    alignItems: 'center',
+    shadowColor: colors.navy,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
+  },
+  statValue: {
+    fontSize: 22,
+    fontFamily: fonts.bold,
+    color: colors.ink,
+    letterSpacing: -0.24,
+  },
+  statLabel: {
+    fontSize: 12,
+    fontFamily: fonts.medium,
+    color: colors.textSlate,
+    letterSpacing: -0.13,
+    marginTop: spacing.xs,
+  },
   list: {
-    marginTop: 40,
-    marginHorizontal: spacing.xl,
+    marginTop: spacing.xl,
+    marginHorizontal: spacing.md,
     backgroundColor: colors.white,
     borderRadius: 24,
     shadowColor: colors.navy,
@@ -187,7 +243,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: spacing.lg,
     paddingVertical: 14,
   },
   rowBorder: {
@@ -205,23 +261,24 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   rowLabel: {
     flex: 1,
-    color: colors.navy,
+    color: colors.ink,
     fontFamily: fonts.medium,
-    fontSize: 16,
+    fontSize: 15,
+    letterSpacing: -0.16,
   },
   chevron: {
     color: colors.textMuted,
     fontSize: 24,
   },
   logout: {
-    marginHorizontal: spacing.xl,
+    marginHorizontal: spacing.md,
     marginTop: 'auto',
     marginBottom: 110,
     borderRadius: radius.pill,
     borderWidth: 1.5,
     borderColor: colors.pinkSoft,
     backgroundColor: colors.white,
-    paddingVertical: 16,
+    paddingVertical: spacing.lg,
     alignItems: 'center',
     shadowColor: colors.pink,
     shadowOpacity: 0.08,
@@ -233,6 +290,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     color: colors.pink,
     fontFamily: fonts.medium,
     fontSize: 15,
+    letterSpacing: -0.16,
   },
   modalBackdrop: {
     flex: 1,

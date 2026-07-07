@@ -21,20 +21,22 @@ export default function AiBuddyBanner({ style, translucent = false }: AiBuddyBan
   return (
     <View style={[styles.wrap, translucent && styles.wrapTranslucent, style]}>
       <View style={styles.avatar}>
-        <Svg width={46} height={47} viewBox="0 0 46 47" style={StyleSheet.absoluteFill}>
+        <Svg width={42} height={42} viewBox="0 0 46 47" style={StyleSheet.absoluteFill}>
           <Rect x={8} y={12} width={34} height={34} rx={17} fill="#3C425F" />
           <Path d={SPARKLE_BIG} fill="#474D67" />
           <Path d={SPARKLE_SMALL} fill="#474D67" />
         </Svg>
         <Image
-          source={require('../assets/robot2.png')}
+          source={require('../assets/robothome.png')}
           style={styles.avatarImg}
           resizeMode="contain"
         />
       </View>
       <View style={styles.textCol}>
         <Text style={styles.label}>Your A.i buddy</Text>
-        <Text style={styles.title}>You're learning great today!</Text>
+        <Text style={styles.title} numberOfLines={1}>
+          You're learning great today!
+        </Text>
       </View>
     </View>
   );
@@ -44,37 +46,42 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   wrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.screenBg,
+    backgroundColor: 'transparent',
     borderRadius: radius.md,
     padding: spacing.md,
   },
   wrapTranslucent: {
-    backgroundColor: colors.overlayLight,
+    backgroundColor: 'transparent',
   },
   avatar: {
-    width: 46,
-    height: 47,
+    width: 42,
+    height: 42,
     marginRight: spacing.md,
   },
   avatarImg: {
     position: 'absolute',
-    left: 12,
-    top: 5,
-    width: 27,
-    height: 33,
+    left: 0,
+    top: 0,
+    width: 42,
+    height: 42,
   },
   textCol: {
     flex: 1,
+    marginLeft: -10,
   },
   label: {
     color: colors.textSecondary,
     fontSize: 12,
     fontFamily: fonts.regular,
+    lineHeight: 12,
+    letterSpacing: -0.13,
   },
   title: {
-    color: colors.navy,
+    color: colors.ink,
     fontFamily: fonts.interMedium,
     fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: -0.15,
     marginTop: 2,
   },
 });

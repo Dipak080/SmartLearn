@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-import { fonts, radius, useAppTheme, type AppColors } from '../theme';
+import { fonts, radius, spacing, useAppTheme, type AppColors } from '../theme';
 import { BookOutlineIcon, ClockIcon } from './icons';
 
 interface MetaChipProps {
@@ -13,11 +13,12 @@ interface MetaChipProps {
 export default function MetaChip({ label, icon, translucent = false }: MetaChipProps) {
   const { colors } = useAppTheme();
   const styles = useStyles(colors);
+  const contentColor = translucent ? '#073647' : '#1F4958';
   return (
     <View style={[styles.chip, translucent && styles.translucent]}>
-      {icon === 'book' && <BookOutlineIcon size={14} color={colors.navy} />}
-      {icon === 'clock' && <ClockIcon size={13} color={colors.navy} />}
-      <Text style={styles.label}>{label}</Text>
+      {icon === 'book' && <BookOutlineIcon size={16} color={contentColor} />}
+      {icon === 'clock' && <ClockIcon size={16} color={contentColor} />}
+      <Text style={[styles.label, translucent && styles.labelTranslucent]}>{label}</Text>
     </View>
   );
 }
@@ -29,16 +30,21 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     gap: 5,
     backgroundColor: colors.overlayLighter,
     borderRadius: radius.pill,
-    paddingHorizontal: 12,
+    paddingHorizontal: spacing.md,
     paddingVertical: 7,
-    marginRight: 8,
+    marginRight: spacing.sm,
   },
   translucent: {
-    backgroundColor: colors.overlayLight,
+    backgroundColor: colors.metaLime,
   },
   label: {
-    fontSize: 12,
-    color: colors.navy,
+    fontSize: 10,
+    color: '#1F4958',
     fontFamily: fonts.semiBold,
+    lineHeight: 10,
+    letterSpacing: -0.11,
+  },
+  labelTranslucent: {
+    color: '#073647',
   },
 });

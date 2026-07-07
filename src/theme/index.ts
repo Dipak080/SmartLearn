@@ -20,9 +20,12 @@ export const lightColors = {
   fireSoft: '#FBBF24',
 
   // Text
+  ink: '#010000',
   textPrimary: '#1B2A4A',
   textSecondary: '#8A93A6',
+  textSlate: '#708892',
   textMuted: '#AAB2C2',
+  navyDeep: '#1C274C',
 
   // Utility
   border: '#EDEFF3',
@@ -36,6 +39,19 @@ export const lightColors = {
   tickGrey: '#C9CFDA',
   overlayLight: 'rgba(255,255,255,0.85)',
   overlayLighter: 'rgba(255,255,255,0.2)',
+
+  // Surfaces (tinted card / chip backgrounds)
+  surfaceMuted: '#F8F8F8',
+  chipCountBg: '#F9F9F9',
+  surfaceBlue: '#E5F2F9',
+  surfaceBlueSoft: '#EDF6FB',
+  heroLime: '#DCEA8F',
+  heroLimeSoft: '#EAF2BC',
+  metaLime: '#E6F0AF',
+  streakInactive: '#EEF7EC',
+  chipPinkBg: '#F2D1D0',
+  onboardBlue: '#71A6EE',
+  onboardBlueSoft: '#CADDF7',
 };
 
 export const darkColors = {
@@ -45,9 +61,12 @@ export const darkColors = {
   white: '#16233D',
   screenBg: '#1B2A4A',
   
+  ink: '#FFFFFF',
   textPrimary: '#FFFFFF',
   textSecondary: '#AAB2C2',
-  
+  textSlate: '#AAB2C2',
+  navyDeep: '#FFFFFF',
+
   border: '#2C3A5A',
   chipBg: '#233252',
   blueSoft: '#233252',
@@ -60,6 +79,19 @@ export const darkColors = {
   cream: '#363428',
   overlayLight: 'rgba(22,35,61,0.85)',
   overlayLighter: 'rgba(22,35,61,0.2)',
+
+  // Surfaces adapt to dark theme
+  surfaceMuted: '#1F2E4A',
+  chipCountBg: '#233252',
+  surfaceBlue: '#233252',
+  surfaceBlueSoft: '#233252',
+  heroLime: '#2A301A',
+  heroLimeSoft: '#2A301A',
+  metaLime: '#2A301A',
+  streakInactive: '#243024',
+  chipPinkBg: '#3F2730',
+  onboardBlue: '#3A5480',
+  onboardBlueSoft: '#2C3A5A',
 };
 
 export const colors = lightColors;

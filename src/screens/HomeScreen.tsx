@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal, Pressable, Animated } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal, Pressable, Animated, useWindowDimensions } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Circle } from 'react-native-svg';
+import Svg, { Circle, Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import CountryFlag from 'react-native-country-flag';
 
 import { fonts, spacing, radius, useAppTheme, type AppColors } from '../theme';
 import GirlWithPenSvg from '../assets/girlwithpen.svg';
-import { CATEGORIES, COURSES, Course, CategoryIcon } from '../data';
+import NotificationSvg from '../assets/notification.svg';
+import EbookLineSvg from '../assets/ebookline.svg';
+import CroseSvg from '../assets/crose.svg';
+import { CATEGORIES, COURSES, Course, CategoryIcon, TODAYS_PICK } from '../data';
 import { LANGUAGES, NOTIFICATIONS, type Language } from '../data/homeUi';
 import AiBuddyBanner from '../components/AiBuddyBanner';
 import MetaChip from '../components/MetaChip';
 import PlayButton from '../components/PlayButton';
 import SelectableChip from '../components/SelectableChip';
 import {
-  BellIcon,
   BookOutlineIcon,
   CheckIcon,
   ChevronDownIcon,
@@ -21,42 +23,58 @@ import {
   NotificationIcon,
   PaletteIcon,
   PlayIcon,
-  WaveIcon,
+  ShapesIcon,
 } from '../components/icons';
 import type { MainTabScreenProps } from '../navigation/types';
 
 type Props = MainTabScreenProps<'Home'>;
 
-const FLAG_SIZE = 16;
+const FLAG_BADGE_SIZE = 16;
 
 function FlagBadge({ countryCode, style }: { countryCode: string; style?: object }) {
   return (
     <View style={[flagBadgeStyles.wrap, style]}>
-      <CountryFlag isoCode={countryCode} size={FLAG_SIZE} />
+      <CountryFlag
+        isoCode={countryCode}
+        size={FLAG_BADGE_SIZE}
+        style={flagBadgeStyles.flag}
+      />
     </View>
   );
 }
 
 const flagBadgeStyles = StyleSheet.create({
   wrap: {
-    width: FLAG_SIZE * 1.6,
-    height: FLAG_SIZE,
-    borderRadius: 2,
+    width: FLAG_BADGE_SIZE,
+    height: FLAG_BADGE_SIZE,
+    borderRadius: FLAG_BADGE_SIZE / 2,
     overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: 1,
+  },
+  flag: {
+    width: FLAG_BADGE_SIZE,
+    height: FLAG_BADGE_SIZE,
+    borderRadius: FLAG_BADGE_SIZE / 2,
   },
 });
 
-function CategoryGlyph({ icon, size = 16 }: { icon: CategoryIcon; size?: number }) {
+function CategoryGlyph({ icon, size = 16, active = false }: { icon: CategoryIcon; size?: number; active?: boolean }) {
   const { colors } = useAppTheme();
+  const glyphColor = active ? colors.white : colors.navy;
   const glyphStyles = StyleSheet.create({
     aa: {
-      color: colors.navy,
+      color: glyphColor,
       fontFamily: fonts.bold,
     },
   });
 
   if (icon === 'palette') {
-    return <PaletteIcon size={size + 2} />;
+    return <PaletteIcon size={size} color={glyphColor} />;
+  }
+  if (icon === 'shapes') {
+    return <ShapesIcon size={size} color={glyphColor} />;
   }
   return <Text style={[glyphStyles.aa, { fontSize: size }]}>Aa</Text>;
 }
@@ -77,14 +95,23 @@ function ProgressPlay({ progress }: { progress: number }) {
           cx={RING_SIZE / 2}
           cy={RING_SIZE / 2}
           r={RING_R}
+          stroke="#CED5DD"
+          strokeWidth={RING_STROKE}
+          fill="none"
+        />
+        <Circle
+          cx={RING_SIZE / 2}
+          cy={RING_SIZE / 2}
+          r={RING_R}
           stroke={colors.navyDark}
           strokeWidth={RING_STROKE}
-          strokeLinecap="round"
+          strokeLinecap="butt"
           fill="none"
           strokeDasharray={`${RING_C * progress} ${RING_C}`}
-          rotation={-60}
+          rotation={120}
           originX={RING_SIZE / 2}
           originY={RING_SIZE / 2}
+          scaleX={-1}
         />
       </Svg>
       <TouchableOpacity style={styles.pickPlay} activeOpacity={0.85}>
@@ -97,11 +124,26 @@ function ProgressPlay({ progress }: { progress: number }) {
 function CourseCard({ course, onStart }: { course: Course; onStart: () => void }) {
   const { colors } = useAppTheme();
   const styles = useStyles(colors);
+  const { width: windowWidth } = useWindowDimensions();
+  const hasGradient = course.id === 'colors';
+  const cardWidth = { width: Math.min(280, windowWidth * 0.78) };
+  const cardBg = !hasGradient && { backgroundColor: colors[course.bg] };
   return (
-    <View style={[styles.courseCard, { backgroundColor: colors[course.bg] }]}>
+    <View style={[styles.courseCard, cardWidth, cardBg]}>
+      {hasGradient && (
+        <Svg style={StyleSheet.absoluteFill}>
+          <Defs>
+            <LinearGradient id="colorsCardBg" x1="0" y1="0" x2="0" y2="1">
+              <Stop offset="0" stopColor="#EBDCFA" />
+              <Stop offset="1" stopColor="#E0CCF6" />
+            </LinearGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100%" height="100%" fill="url(#colorsCardBg)" />
+        </Svg>
+      )}
       <View style={styles.courseMetaRow}>
         <View style={styles.courseIconCircle}>
-          <CategoryGlyph icon={course.icon} size={18} />
+          <CategoryGlyph icon={course.icon} size={course.icon === 'palette' ? 20 : 18} />
         </View>
         <View style={styles.courseMetaChips}>
           <MetaChip icon="book" label={course.lessons} />
@@ -112,7 +154,12 @@ function CourseCard({ course, onStart }: { course: Course; onStart: () => void }
       <Text style={styles.courseTag}>{course.tag}</Text>
       <Text style={styles.courseTitle}>{course.title}</Text>
 
-      <course.illustration width={140} height={130} style={styles.courseImage} />
+      <course.illustration width={145} height={145} style={styles.courseImage} />
+      {hasGradient ? (
+        <CroseSvg width={350} height={300} style={styles.courseLine} />
+      ) : (
+        <EbookLineSvg width={150} height={300} style={styles.courseLine} />
+      )}
 
       <PlayButton label="Start learning" variant="card" onPress={onStart} style={styles.startBtn} />
     </View>
@@ -125,7 +172,6 @@ export default function HomeScreen({ navigation }: Props) {
   const [activeCategory, setActiveCategory] = useState('all');
   const [openMenu, setOpenMenu] = useState<'lang' | 'notif' | null>(null);
   const [language, setLanguage] = useState<Language>(LANGUAGES[0]);
-  const [hasUnread, setHasUnread] = useState(true);
   const insets = useSafeAreaInsets();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -139,10 +185,10 @@ export default function HomeScreen({ navigation }: Props) {
 
   const openNotifications = () => {
     setOpenMenu('notif');
-    setHasUnread(false);
   };
 
   const dropdownTop = insets.top + 64;
+  const dropdownTopStyle = { top: dropdownTop };
   const fadeStyle = { opacity: fadeAnim };
 
   return (
@@ -160,8 +206,7 @@ export default function HomeScreen({ navigation }: Props) {
           />
           <View style={styles.headerText}>
             <View style={styles.helloRow}>
-              <Text style={styles.hello}>Hello Max </Text>
-              <WaveIcon size={14} />
+              <Text style={styles.hello}>Hello Max 👋</Text>
             </View>
             <Text style={styles.greeting}>Good Morning</Text>
           </View>
@@ -179,13 +224,12 @@ export default function HomeScreen({ navigation }: Props) {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.bell} activeOpacity={0.8} onPress={openNotifications}>
-            <BellIcon />
-            {hasUnread && <View style={styles.bellDot} />}
+            <NotificationSvg width={24} height={24} />
           </TouchableOpacity>
         </View>
 
         <View style={styles.pickCard}>
-          <GirlWithPenSvg width={82} height={104} style={styles.pickIllustration} />
+          <GirlWithPenSvg width={96} height={132} style={styles.pickIllustration} />
           <View style={styles.pickDoodle}>
             <Image
               source={require('../assets/light.png')}
@@ -200,23 +244,23 @@ export default function HomeScreen({ navigation }: Props) {
                 style={styles.pickTitle}
                 numberOfLines={1}
                 adjustsFontSizeToFit
-                minimumFontScale={0.8}
+                minimumFontScale={0.6}
               >
-                Today's pick: Shapes
+                Today's pick: {TODAYS_PICK.title}
               </Text>
               <View style={styles.pickMetaRow}>
                 <BookOutlineIcon size={14} color={colors.textSecondary} />
-                <Text style={styles.pickMeta}>12 lessons</Text>
+                <Text style={styles.pickMeta}>{TODAYS_PICK.lessons}</Text>
                 <Text style={styles.pickMetaDot}>·</Text>
                 <ClockIcon size={13} color={colors.textSecondary} />
-                <Text style={styles.pickMeta}>10 min</Text>
+                <Text style={styles.pickMeta}>{TODAYS_PICK.time}</Text>
               </View>
             </View>
             <Text style={styles.pickPercent}>
-              <Text style={styles.pickPercentStrong}>20% </Text>
+              <Text style={styles.pickPercentStrong}>{Math.round(TODAYS_PICK.progress * 100)}% </Text>
               complete
             </Text>
-            <ProgressPlay progress={0.82} />
+            <ProgressPlay progress={TODAYS_PICK.progress} />
           </View>
         </View>
 
@@ -232,7 +276,15 @@ export default function HomeScreen({ navigation }: Props) {
               key={category.key}
               label={category.label}
               count={category.count}
-              icon={category.icon && <CategoryGlyph icon={category.icon} size={13} />}
+              icon={
+                category.icon && (
+                  <CategoryGlyph
+                    icon={category.icon}
+                    size={20}
+                    active={activeCategory === category.key}
+                  />
+                )
+              }
               active={activeCategory === category.key}
               onPress={() => setActiveCategory(category.key)}
             />
@@ -261,7 +313,7 @@ export default function HomeScreen({ navigation }: Props) {
         onRequestClose={() => setOpenMenu(null)}
       >
         <Pressable style={styles.backdrop} onPress={() => setOpenMenu(null)}>
-          <View style={[styles.dropdown, styles.langDropdown, { top: dropdownTop }]}>
+          <View style={[styles.dropdown, styles.langDropdown, dropdownTopStyle]}>
             {LANGUAGES.map((lang, i) => (
               <TouchableOpacity
                 key={lang.code}
@@ -295,7 +347,7 @@ export default function HomeScreen({ navigation }: Props) {
         onRequestClose={() => setOpenMenu(null)}
       >
         <Pressable style={styles.backdrop} onPress={() => setOpenMenu(null)}>
-          <View style={[styles.dropdown, styles.notifDropdown, { top: dropdownTop }]}>
+          <View style={[styles.dropdown, styles.notifDropdown, dropdownTopStyle]}>
             <Text style={styles.dropdownTitle}>Notifications</Text>
             {NOTIFICATIONS.map((item, i) => (
               <View
@@ -331,7 +383,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
   },
   avatar: {
@@ -357,8 +409,8 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   greeting: {
     color: colors.navy,
-    fontFamily: fonts.bold,
-    fontSize: 12,
+    fontFamily: fonts.interMedium,
+    fontSize: 15,
     marginTop: 1,
   },
   langChip: {
@@ -369,7 +421,8 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     borderRadius: radius.pill,
     paddingHorizontal: 14,
     paddingVertical: 11,
-    marginRight: spacing.sm,
+    marginLeft: spacing.sm,
+    marginRight: 3,
   },
   langChipContent: {
     flexDirection: 'row',
@@ -377,9 +430,12 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     gap: 6,
   },
   langText: {
-    fontSize: 13,
+    fontSize: 12,
     color: colors.navy,
-    fontFamily: fonts.semiBold,
+    fontFamily: fonts.interMedium,
+    lineHeight: 18,
+    letterSpacing: -0.13,
+    textAlign: 'center',
   },
   chevronUp: {
     transform: [{ rotate: '180deg' }],
@@ -391,15 +447,6 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.chipBg,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  bellDot: {
-    position: 'absolute',
-    top: 8,
-    right: 10,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.pink,
   },
   backdrop: {
     flex: 1,
@@ -436,7 +483,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingVertical: 12,
+    paddingVertical: spacing.md,
   },
   dropdownRowBorder: {
     borderTopWidth: 1,
@@ -473,7 +520,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     fontFamily: fonts.regular,
   },
   pickCard: {
-    marginHorizontal: spacing.xl,
+    marginHorizontal: spacing.md,
     marginTop: spacing.lg,
     backgroundColor: colors.blueCard,
     borderRadius: radius.lg,
@@ -481,8 +528,10 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   pickIllustration: {
     position: 'absolute',
-    top: -6,
+    top: -10,
     right: 6,
+    opacity: 1,
+    transform: [{ rotate: '-3deg' }],
   },
   pickDoodle: {
     position: 'absolute',
@@ -501,14 +550,18 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   buddyInline: {
     backgroundColor: 'transparent',
-    marginRight: 96,
+    marginLeft: -16,
+    marginRight: 64,
   },
   pickBottom: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: spacing.md,
-    backgroundColor: colors.white,
+    marginHorizontal: -7,
+    marginBottom: -7,
+    backgroundColor: 'rgba(255,255,255,0.5)',
     borderRadius: radius.md,
+    overflow: 'hidden',
     paddingLeft: spacing.md,
     paddingRight: 10,
     paddingVertical: spacing.md,
@@ -517,9 +570,12 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     flex: 1,
   },
   pickTitle: {
-    color: colors.navy,
-    fontFamily: fonts.medium,
-    fontSize: 13,
+    color: colors.ink,
+    fontFamily: fonts.interMedium,
+    fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: -0.15,
+    paddingBottom: 1,
   },
   pickMetaRow: {
     flexDirection: 'row',
@@ -538,15 +594,18 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     marginHorizontal: 2,
   },
   pickPercent: {
-    color: colors.textSecondary,
+    color: colors.textSlate,
     fontSize: 12,
     marginRight: 6,
     marginLeft: 6,
     fontFamily: fonts.regular,
+    lineHeight: 12,
+    letterSpacing: -0.13,
   },
   pickPercentStrong: {
-    color: colors.navy,
+    color: '#121111',
     fontFamily: fonts.regular,
+    letterSpacing: -0.13,
   },
   ringWrap: {
     width: RING_SIZE,
@@ -564,27 +623,28 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     paddingLeft: 2,
   },
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 26,
     fontFamily: fonts.medium,
-    color: colors.navy,
+    color: colors.ink,
+    lineHeight: 26,
+    letterSpacing: -0.29,
     marginTop: spacing.xl,
-    marginHorizontal: spacing.xl,
+    marginHorizontal: spacing.md,
   },
   chipsRow: {
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
   },
   coursesRow: {
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
   },
   courseCard: {
-    width: 306,
-    borderRadius: radius.lg,
+    minHeight: 315,
+    borderRadius: 32,
     padding: spacing.lg,
-    marginRight: 16,
+    marginRight: spacing.lg,
     overflow: 'hidden',
-    minHeight: 300,
   },
   courseMetaRow: {
     flexDirection: 'row',
@@ -606,28 +666,39 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   courseTag: {
     color: colors.navy,
     opacity: 0.6,
-    marginTop: spacing.lg,
-    fontSize: 13,
+    marginTop: spacing.md,
+    fontSize: 14,
     fontFamily: fonts.regular,
   },
   courseTitle: {
-    color: colors.navy,
-    fontFamily: fonts.extraBold,
-    fontSize: 24,
-    marginTop: 4,
-    lineHeight: 30,
+    color: colors.ink,
+    fontFamily: fonts.medium,
+    fontSize: 28,
+    marginTop: spacing.xs,
+    lineHeight: 28,
+    letterSpacing: -0.31,
   },
   courseImage: {
-    width: 150,
-    height: 130,
+    width: 145,
+    height: 145,
     alignSelf: 'flex-end',
-    marginVertical: spacing.sm,
+    marginTop: -12,
+    marginBottom: -30,
+    opacity: 1,
+  },
+  courseLine: {
+    position: 'absolute',
+    right: 10,
+    top: 20,
+    opacity: 1,
   },
   startBtn: {
-    alignSelf: 'stretch',
+    alignSelf: 'flex-start',
     justifyContent: 'space-between',
     paddingVertical: 10,
     paddingLeft: 18,
     marginTop: 'auto',
+    marginBottom: spacing.sm,
+    marginLeft: -4,
   },
 });

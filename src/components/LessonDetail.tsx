@@ -2,52 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
+import { BlurView } from '@sbaiahmed1/react-native-blur';
 
 import { fonts, spacing, radius, useAppTheme, type AppColors } from '../theme';
 import AbcboySvg from '../assets/abcboy.svg';
+import EbookLineSvg from '../assets/ebookline.svg';
 import { LESSONS, Lesson } from '../data';
 import AiBuddyBanner from './AiBuddyBanner';
+import LessonProgressCircle from './LessonProgressCircle';
 import MetaChip from './MetaChip';
 import PlayButton from './PlayButton';
 import { BackIcon, CheckIcon, ClockIcon } from './icons';
-
-const PROGRESS_SIZE = 54;
-const PROGRESS_STROKE = 4;
-const PROGRESS_R = (PROGRESS_SIZE - PROGRESS_STROKE) / 2;
-const PROGRESS_C = 2 * Math.PI * PROGRESS_R;
-
-function ProgressCircle({ progress, label }: { progress: number; label: string }) {
-  const { colors } = useAppTheme();
-  const styles = useStyles(colors);
-  return (
-    <View style={styles.progressCircle}>
-      <Svg width={PROGRESS_SIZE} height={PROGRESS_SIZE} style={StyleSheet.absoluteFill}>
-        <Circle
-          cx={PROGRESS_SIZE / 2}
-          cy={PROGRESS_SIZE / 2}
-          r={PROGRESS_R}
-          stroke={colors.border}
-          strokeWidth={PROGRESS_STROKE}
-          fill={colors.white}
-        />
-        <Circle
-          cx={PROGRESS_SIZE / 2}
-          cy={PROGRESS_SIZE / 2}
-          r={PROGRESS_R}
-          stroke={colors.greenDeep}
-          strokeWidth={PROGRESS_STROKE}
-          strokeLinecap="round"
-          fill="none"
-          strokeDasharray={`${PROGRESS_C * progress} ${PROGRESS_C}`}
-          rotation={-90}
-          originX={PROGRESS_SIZE / 2}
-          originY={PROGRESS_SIZE / 2}
-        />
-      </Svg>
-      <Text style={styles.progressText}>{label}</Text>
-    </View>
-  );
-}
 
 interface LessonDetailProps {
   onBack: () => void;
@@ -61,6 +26,10 @@ function TimelineNode({ lesson, isLast }: { lesson: Lesson; isLast: boolean }) {
   const NODE_STROKE = 5;
   const NODE_R = (NODE_SIZE - NODE_STROKE) / 2;
   const NODE_C = 2 * Math.PI * NODE_R;
+
+  const cardBg = { backgroundColor: colors[lesson.bg] };
+  const timePillBg = { backgroundColor: lesson.timeBg };
+  const descTextColor = { color: lesson.descColor };
 
   return (
     <View style={styles.row}>
@@ -96,7 +65,7 @@ function TimelineNode({ lesson, isLast }: { lesson: Lesson; isLast: boolean }) {
                   strokeLinecap="round"
                   fill="none"
                   strokeDasharray={`${NODE_C * 0.75} ${NODE_C}`}
-                  rotation="-90"
+                  rotation="0"
                   origin={`${NODE_SIZE / 2}, ${NODE_SIZE / 2}`}
                 />
               </Svg>
@@ -113,18 +82,16 @@ function TimelineNode({ lesson, isLast }: { lesson: Lesson; isLast: boolean }) {
         )}
       </View>
 
-      <View
-        style={[styles.card, { backgroundColor: colors[lesson.bg] }, lesson.faded && styles.cardFaded]}
-      >
+      <View style={[styles.card, cardBg, lesson.faded && styles.cardFaded]}>
         <View style={styles.cardHeader}>
           <Text style={styles.cardTitle}>{lesson.title}</Text>
-          <View style={styles.cardTimePill}>
+          <View style={[styles.cardTimePill, timePillBg]}>
             <ClockIcon size={11} color={colors.navy} />
             <Text style={styles.cardTime}>{lesson.time}</Text>
           </View>
         </View>
         <View style={styles.cardBody}>
-          <Text style={styles.cardDesc}>{lesson.desc}</Text>
+          <Text style={[styles.cardDesc, descTextColor]}>{lesson.desc}</Text>
           {!lesson.faded && <PlayButton label={lesson.action} style={styles.actionBtn} />}
         </View>
       </View>
@@ -154,11 +121,18 @@ export default function LessonDetail({ onBack, insideTabs = false }: LessonDetai
             <MetaChip icon="clock" label="1hr 30 min" translucent />
           </View>
 
+          <EbookLineSvg width={400} height={200} style={styles.heroLine} />
           <AbcboySvg width={220} height={260} style={styles.heroImg} />
 
           <View style={styles.heroBuddy}>
+            <BlurView
+              style={styles.heroBuddyBlur}
+              blurType="light"
+              blurAmount={30}
+              reducedTransparencyFallbackColor="transparent"
+            />
             <AiBuddyBanner style={styles.buddyFlex} />
-            <ProgressCircle progress={0.12} label="12%" />
+            <LessonProgressCircle progress={0.12} label="12%" />
           </View>
         </View>
       </SafeAreaView>
@@ -182,12 +156,12 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.white,
   },
   hero: {
-    backgroundColor: colors.lime,
+    backgroundColor: colors.heroLime,
     borderBottomLeftRadius: radius.lg,
     borderBottomRightRadius: radius.lg,
   },
   heroInner: {
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: spacing.md,
     paddingBottom: spacing.xl,
   },
   heroTopRow: {
@@ -196,10 +170,11 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'flex-start',
   },
   backBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: colors.overlayLight,
+    width: 48,
+    height: 48,
+    borderRadius: 28,
+    padding: spacing.lg,
+    backgroundColor: colors.heroLimeSoft,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: spacing.sm,
@@ -209,19 +184,27 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     right: -12,
     top: 10,
   },
+  heroLine: {
+    position: 'absolute',
+    right: -100,
+    top: -20,
+    opacity: 1,
+  },
   heroTag: {
-    color: colors.navy,
-    opacity: 0.6,
+    color: colors.textSlate,
     fontSize: 14,
     marginTop: spacing.md,
     fontFamily: fonts.regular,
+    lineHeight: 14,
+    letterSpacing: -0.15,
   },
   heroTitle: {
-    color: colors.navy,
+    color: colors.ink,
     fontFamily: fonts.medium,
-    fontSize: 26,
-    lineHeight: 34,
-    marginTop: 4,
+    fontSize: 25,
+    lineHeight: 30,
+    letterSpacing: -0.28,
+    marginTop: spacing.xs,
   },
   heroMetaRow: {
     flexDirection: 'row',
@@ -232,31 +215,31 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     marginTop: spacing.lg,
     gap: spacing.md,
-    backgroundColor: colors.overlayLight,
-    padding: spacing.md,
-    borderRadius: radius.md,
+    backgroundColor: 'rgba(255,255,255,0.4)',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.lg,
+    borderRadius: 25,
+    overflow: 'hidden',
+  },
+  heroBuddyBlur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 25,
   },
   buddyFlex: {
     flex: 1,
     backgroundColor: 'transparent',
     padding: 0,
   },
-  progressCircle: {
-    width: PROGRESS_SIZE,
-    height: PROGRESS_SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  progressText: {
-    color: colors.navy,
-    fontFamily: fonts.bold,
-    fontSize: 13,
-  },
   list: {
     flex: 1,
   },
   listContent: {
-    padding: spacing.xl,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.xl,
     paddingBottom: 40,
   },
   listContentTabs: {
@@ -319,7 +302,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     width: 2,
     flex: 1,
     backgroundColor: colors.border,
-    marginVertical: 4,
+    marginVertical: spacing.xs,
   },
   connectorDone: {
     width: 6,
@@ -349,9 +332,11 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     marginTop: 6,
   },
   cardTitle: {
-    color: colors.navy,
-    fontFamily: fonts.medium,
+    color: colors.ink,
+    fontFamily: fonts.interMedium,
     fontSize: 16,
+    lineHeight: 20,
+    letterSpacing: -0.18,
   },
   cardTimePill: {
     flexDirection: 'row',
@@ -360,7 +345,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: radius.pill,
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: spacing.xs,
   },
   cardTime: {
     color: colors.navy,
@@ -369,11 +354,12 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   cardDesc: {
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: -0.13,
     flex: 1,
     marginRight: spacing.md,
-    fontFamily: fonts.medium,
+    fontFamily: fonts.regular,
   },
   actionBtn: {},
 });

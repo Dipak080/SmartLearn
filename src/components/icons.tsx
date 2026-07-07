@@ -19,8 +19,7 @@ export function PlayIcon({ size = 16, color }: IconProps) {
 }
 
 export function BellIcon({ size = 20, color }: IconProps) {
-  const { colors } = useAppTheme();
-  const iconColor = color || colors.navy;
+  const iconColor = color || '#2F3656';
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Path
@@ -29,7 +28,7 @@ export function BellIcon({ size = 20, color }: IconProps) {
         strokeWidth={1.7}
         strokeLinejoin="round"
       />
-      <Path d="M10 20a2 2 0 0 0 4 0" stroke={color} strokeWidth={1.7} />
+      <Path d="M10 20a2 2 0 0 0 4 0" stroke={iconColor} strokeWidth={1.7} />
     </Svg>
   );
 }
@@ -56,7 +55,7 @@ export function BackIcon({ size = 20, color }: IconProps) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Path
-        d="M15 5l-7 7 7 7"
+        d="M19 12H5M5 12l6-6M5 12l6 6"
         stroke={iconColor}
         strokeWidth={2}
         strokeLinecap="round"
@@ -123,6 +122,24 @@ export function PaletteIcon({ size = 18, color }: IconProps) {
       <Circle cx={7.6} cy={11} r={1.15} fill={color} />
       <Circle cx={10.5} cy={7.3} r={1.15} fill={color} />
       <Circle cx={15.2} cy={7.3} r={1.15} fill={color} />
+    </Svg>
+  );
+}
+
+export function ShapesIcon({ size = 18, color }: IconProps) {
+  const { colors } = useAppTheme();
+  const iconColor = color || colors.navy;
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <Circle cx={7} cy={7} r={4} stroke={iconColor} strokeWidth={1.6} />
+      <Path
+        d="M16.5 3.5l4 7h-8l4-7z"
+        stroke={iconColor}
+        strokeWidth={1.6}
+        strokeLinejoin="round"
+      />
+      <Rect x={13.5} y={13.5} width={7} height={7} rx={1.2} stroke={iconColor} strokeWidth={1.6} />
+      <Rect x={3.5} y={13.5} width={7} height={7} rx={1.2} stroke={iconColor} strokeWidth={1.6} />
     </Svg>
   );
 }
@@ -254,18 +271,30 @@ export function NotificationIcon({
 
 export type TabIconName = 'home' | 'book' | 'stats' | 'profile';
 
-export function TabIcon({ name, color }: { name: TabIconName; color: string }) {
+export function TabIcon({
+  name,
+  color,
+  active = false,
+}: {
+  name: TabIconName;
+  color: string;
+  active?: boolean;
+}) {
+  // When active: the outer shape is filled white and inner details are navy.
+  const fill = active ? '#FFFFFF' : 'none';
+  const detail = active ? '#1C274C' : color;
   switch (name) {
     case 'home':
       return (
         <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
           <Path
             d="M4 10.8 12 4l8 6.8v8.2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"
+            fill={fill}
             stroke={color}
             strokeWidth={1.8}
             strokeLinejoin="round"
           />
-          <Path d="M10 15.5c1.2 1 2.8 1 4 0" stroke={color} strokeWidth={1.6} strokeLinecap="round" />
+          <Path d="M10 15.5c1.2 1 2.8 1 4 0" stroke={detail} strokeWidth={1.6} strokeLinecap="round" />
         </Svg>
       );
     case 'book':
@@ -273,6 +302,7 @@ export function TabIcon({ name, color }: { name: TabIconName; color: string }) {
         <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
           <Path
             d="M5 5a2 2 0 0 1 2-2h12v15.5H7A2 2 0 0 0 5 20z"
+            fill={fill}
             stroke={color}
             strokeWidth={1.7}
             strokeLinejoin="round"
@@ -283,7 +313,7 @@ export function TabIcon({ name, color }: { name: TabIconName; color: string }) {
             y={12.5}
             fontSize={7.5}
             fontWeight="bold"
-            fill={color}
+            fill={detail}
             textAnchor="middle"
           >
             AI
@@ -293,10 +323,10 @@ export function TabIcon({ name, color }: { name: TabIconName; color: string }) {
     case 'stats':
       return (
         <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-          <Rect x={3.5} y={3.5} width={17} height={17} rx={5} stroke={color} strokeWidth={1.7} />
+          <Rect x={3.5} y={3.5} width={17} height={17} rx={5} fill={fill} stroke={color} strokeWidth={1.7} />
           <Path
             d="M8.5 15.5v-4M12 15.5v-7M15.5 15.5v-2.5"
-            stroke={color}
+            stroke={detail}
             strokeWidth={1.8}
             strokeLinecap="round"
           />
@@ -305,9 +335,10 @@ export function TabIcon({ name, color }: { name: TabIconName; color: string }) {
     case 'profile':
       return (
         <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-          <Circle cx={12} cy={8} r={4} stroke={color} strokeWidth={1.8} />
+          <Circle cx={12} cy={8} r={4} fill={fill} stroke={color} strokeWidth={1.8} />
           <Path
             d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"
+            fill={fill}
             stroke={color}
             strokeWidth={1.8}
             strokeLinecap="round"

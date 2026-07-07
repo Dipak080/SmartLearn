@@ -2,7 +2,7 @@
 
 Figma design with React Native (bare workflow) and TypeScript. Runs on both iOS and Android.
 
-**Stack:** React Native 0.86 · TypeScript · React Navigation · react-native-svg
+**Stack:** React Native 0.86 · TypeScript · React Navigation · react-native-svg · Hermes
 
 ## Screens
 
@@ -76,7 +76,7 @@ Metro starts automatically. If it doesn't, run `npm start` in a separate termina
 ```
 src/
   assets/        illustrations (PNG/SVG) and the Inter font files
-  components/    reusable pieces – AiBuddyBanner, PlayButton, MetaChip, SelectableChip, LessonDetail, icons
+  components/    reusable pieces – AiBuddyBanner, PlayButton, MetaChip, SelectableChip, LessonDetail, LessonProgressCircle, icons
   data/          typed mock data and domain models (Course, Lesson, StreakData, …)
   navigation/    bottom-tab bar + typed route params
   screens/       one file per screen

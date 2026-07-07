@@ -45,7 +45,8 @@ function PillTabBar({ state, navigation }: BottomTabBarProps) {
           >
             <TabIcon
               name={TAB_ICONS[route.name]}
-              color={focused ? colors.white : colors.textSecondary}
+              color={focused ? '#FFFFFF' : colors.textSecondary}
+              active={focused}
             />
           </TouchableOpacity>
         );

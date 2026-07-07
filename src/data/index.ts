@@ -4,7 +4,7 @@ import { SvgProps } from 'react-native-svg';
 import AbcboySvg from '../assets/abcboy.svg';
 import LearncolorSvg from '../assets/learncolorobject.svg';
 
-export type CategoryIcon = 'aa' | 'palette';
+export type CategoryIcon = 'aa' | 'palette' | 'shapes';
 
 export interface Category {
   key: string;
@@ -30,7 +30,9 @@ export interface Lesson {
   n: number;
   title: string;
   desc: string;
+  descColor: string;
   time: string;
+  timeBg: string;
   action: string;
   state: LessonState;
   bg: keyof typeof colors;
@@ -41,7 +43,7 @@ export const CATEGORIES: Category[] = [
   { key: 'all', label: 'All', count: '12' },
   { key: 'letters', label: 'Letters', count: '03', icon: 'aa' },
   { key: 'colors', label: 'Colors', count: '04', icon: 'palette' },
-  { key: 'shapes', label: 'Shapes', count: '05' },
+  { key: 'shapes', label: 'Shapes', count: '05', icon: 'shapes' },
 ];
 
 export const COURSES: Course[] = [
@@ -72,7 +74,9 @@ export const LESSONS: Lesson[] = [
     n: 1,
     title: 'A for Apple',
     desc: 'Learn the sound of A and objects that start with A',
+    descColor: '#7B786B',
     time: '2 min',
+    timeBg: '#F8F5E6',
     action: 'Replay',
     state: 'done',
     bg: 'cream',
@@ -81,7 +85,9 @@ export const LESSONS: Lesson[] = [
     n: 2,
     title: 'B for Ball',
     desc: 'Recognize the letter B and its phonetic sound',
+    descColor: '#807575',
     time: '3 min',
+    timeBg: '#FFF1F1',
     action: 'Continue',
     state: 'current',
     bg: 'pinkSoft',
@@ -90,7 +96,9 @@ export const LESSONS: Lesson[] = [
     n: 3,
     title: 'D for Dog',
     desc: 'Hear and repeat the D sound',
+    descColor: '#6C757C',
     time: '5 min',
+    timeBg: '#E6F2FB',
     action: 'Start Lesson',
     state: 'locked',
     bg: 'blueSoft',
@@ -99,7 +107,9 @@ export const LESSONS: Lesson[] = [
     n: 4,
     title: 'C for Cat',
     desc: 'Learn the "C" sound with fun animations',
+    descColor: '#968EA0',
     time: '10 min',
+    timeBg: '#EFE0FF',
     action: 'Start Lesson',
     state: 'locked',
     bg: 'purpleSoft',
@@ -108,12 +118,29 @@ export const LESSONS: Lesson[] = [
     n: 5,
     title: 'E for Elephant',
     desc: 'Learn the "E" sound with fun animations',
+    descColor: '#CDCDCD',
     time: '10 min',
+    timeBg: '#EFE0FF',
     action: 'Start Lesson',
     state: 'locked',
     bg: 'purpleSoft',
   },
 ];
+
+export interface TodaysPick {
+  title: string;
+  lessons: string;
+  time: string;
+  /** Completion as a 0–1 fraction; drives both the ring and the % label. */
+  progress: number;
+}
+
+export const TODAYS_PICK: TodaysPick = {
+  title: 'Shapes',
+  lessons: '12 lessons',
+  time: '10 min',
+  progress: 0.7,
+};
 
 export const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
 

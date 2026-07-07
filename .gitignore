@@ -81,3 +81,7 @@ yarn-error.log
 
 # Custom ignores
 *.zip
+
+# Build outputs
+*.apk
+*.aab

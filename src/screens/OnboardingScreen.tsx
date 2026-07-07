@@ -64,6 +64,7 @@ export default function OnboardingScreen({ navigation }: Props) {
   const { width: windowWidth } = useWindowDimensions();
 
   const slideWidth = windowWidth - spacing.xl * 2 - 12;
+  const slideWidthStyle = { width: slideWidth };
   const illusScale = Math.min(1, slideWidth / 333);
 
   const onSlideEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -78,11 +79,11 @@ export default function OnboardingScreen({ navigation }: Props) {
         bounces={false}
         overScrollMode="never"
       >
-        <EbooklineSvg width={333} height={506} style={styles.bgLine} />
+        <EbooklineSvg width={333} height={530} style={styles.bgLine} />
 
         <View style={styles.logoWrap}>
           <View style={styles.logoBadge}>
-            <BookSvg width={46} height={28} />
+            <BookSvg width={40} height={25} />
           </View>
         </View>
 
@@ -105,16 +106,17 @@ export default function OnboardingScreen({ navigation }: Props) {
         </View>
 
         <View style={styles.heroWrap}>
-          <Svg width={21} height={21} viewBox="0 0 21 21" style={styles.starImg}>
+          <Svg width={24} height={24} viewBox="0 0 21 21" style={styles.starImg}>
             <Path d={STAR_PATH} fill="#474D67" />
           </Svg>
           <View style={styles.heroCard}>
             <View style={styles.swooshClip} pointerEvents="none">
-              <Svg width={345} height={260} viewBox="0 0 345 260" style={styles.cardSwoosh}>
+              <Svg width={395} height={233} viewBox="0 0 395 233" style={styles.cardSwoosh}>
                 <Path
-                  d="M336 48 C300 75 230 95 218 138 C210 175 228 190 250 210"
-                  stroke="#D5E4F9"
-                  strokeWidth={12}
+                  d="M370 40 C270 65 195 100 210 160 C220 195 260 210 320 215"
+                  stroke="#FFFFFF"
+                  strokeOpacity={0.2}
+                  strokeWidth={16}
                   strokeLinecap="round"
                   fill="none"
                 />
@@ -128,7 +130,7 @@ export default function OnboardingScreen({ navigation }: Props) {
               style={styles.slider}
             >
               {SLIDES.map((slide) => (
-                <View key={slide.title} style={[styles.slide, { width: slideWidth }]}>
+                <View key={slide.title} style={[styles.slide, slideWidthStyle]}>
                   <Text style={styles.heroTitle}>{slide.title}</Text>
                   <View style={styles.heroPill}>
                     <Text style={styles.heroPillText}>{slide.pill}</Text>
@@ -146,22 +148,22 @@ export default function OnboardingScreen({ navigation }: Props) {
 
             {page === 0 && (
               <ApplemanSvg
-                width={Math.round(162 * illusScale)}
-                height={Math.round(173 * illusScale)}
+                width={Math.round(211 * illusScale)}
+                height={Math.round(227 * illusScale)}
                 style={styles.heroImage}
               />
             )}
             {page === 1 && (
               <GirlWithPenSvg
-                width={Math.round(130 * illusScale)}
-                height={Math.round(166 * illusScale)}
+                width={Math.round(211 * illusScale)}
+                height={Math.round(227 * illusScale)}
                 style={[styles.heroImage, styles.heroImageAlt]}
               />
             )}
             {page === 2 && (
               <AbcboySvg
-                width={Math.round(160 * illusScale)}
-                height={Math.round(191 * illusScale)}
+                width={Math.round(211 * illusScale)}
+                height={Math.round(227 * illusScale)}
                 style={[styles.heroImage, styles.heroImageAlt, styles.heroImageBoy]}
               />
             )}
@@ -209,7 +211,7 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flexGrow: 1,
     paddingHorizontal: spacing.xl,
-    paddingBottom: 10,
+    paddingBottom: 4,
     alignItems: 'center',
   },
   flexSpacer: {
@@ -219,9 +221,9 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   // keep the SVG at native size, don't rescale it or the two strokes drift apart
   bgLine: {
     position: 'absolute',
-    top: -60,
+    top: -95,
     left: '50%',
-    marginLeft: -136,
+    marginLeft: -90,
   },
   logoWrap: {
     marginTop: spacing.xs,
@@ -240,8 +242,10 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   brand: {
     fontSize: 24,
+    lineHeight: 31,
     fontFamily: fonts.medium,
-    color: colors.navy,
+    color: colors.ink,
+    letterSpacing: -0.26,
     marginTop: spacing.xs,
     marginBottom: 6,
   },
@@ -250,16 +254,16 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     marginTop: spacing.sm,
   },
   featureChip: {
-    borderRadius: 24,
-    borderWidth: 3.5,
-    borderColor: colors.white,
+    borderRadius: 20,
+    borderWidth: 7,
+    borderColor: '#FFFFFF',
   },
   // cards are taller than they look — lower halves tuck behind the next layer
   chipPink: {
     width: '60%',
     maxWidth: 207,
     height: 124,
-    backgroundColor: '#F2D1D0',
+    backgroundColor: colors.chipPinkBg,
     alignSelf: 'center',
     alignItems: 'center',
     paddingTop: 18,
@@ -272,17 +276,19 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.lime,
     alignSelf: 'center',
     paddingLeft: 30,
-    paddingTop: 24,
+    paddingTop: spacing.xl,
     marginTop: -62,
-    transform: [{ translateX: -11 }, { rotate: '7.47deg' }],
+    transform: [{ translateX: 0 }, { rotate: '7.47deg' }],
   },
   chipText: {
-    color: colors.navy,
+    color: colors.ink,
     fontFamily: fonts.medium,
     fontSize: 16,
+    letterSpacing: -0.18,
   },
   chipTextLime: {
-    color: '#4C6B2B',
+    color: colors.ink,
+    opacity: 0.5,
   },
   doodle: {
     position: 'absolute',
@@ -322,16 +328,16 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   cardSwoosh: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: -21,
+    right: -70,
   },
   heroCard: {
     width: '100%',
-    minHeight: 250,
-    backgroundColor: colors.cardBlue,
-    borderRadius: radius.lg,
-    borderWidth: 6,
-    borderColor: colors.white,
+    minHeight: 311,
+    backgroundColor: colors.onboardBlueSoft,
+    borderRadius: 24,
+    borderWidth: 7,
+    borderColor: '#FFFFFF',
   },
   slider: {
     borderRadius: radius.lg - 6,
@@ -343,13 +349,15 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   },
   heroTitle: {
     fontSize: 30,
+    lineHeight: 30,
     fontFamily: fonts.medium,
-    color: colors.navy,
+    color: colors.ink,
+    letterSpacing: -0.33,
   },
   heroPill: {
-    backgroundColor: colors.blue,
+    backgroundColor: colors.onboardBlue,
     alignSelf: 'flex-start',
-    borderRadius: radius.sm,
+    borderRadius: 32,
     paddingHorizontal: 14,
     paddingVertical: 6,
     marginTop: 6,
@@ -357,16 +365,19 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   heroPillText: {
     color: colors.white,
     fontFamily: fonts.medium,
-    fontSize: 19,
+    fontSize: 27,
+    lineHeight: 33,
+    letterSpacing: -0.3,
   },
   heroSubtitle: {
-    color: colors.navy,
-    opacity: 0.7,
+    color: colors.navyDeep,
+    opacity: 0.5,
     marginTop: spacing.md,
-    width: '60%',
+    width: '52%',
     lineHeight: 18,
     fontFamily: fonts.regular,
-    fontSize: 12,
+    fontSize: 14,
+    letterSpacing: -0.15,
   },
   dots: {
     position: 'absolute',
@@ -390,41 +401,46 @@ const useStyles = (colors: AppColors) => StyleSheet.create({
   // let the illustration hang past the card edges, like the design
   heroImage: {
     position: 'absolute',
-    right: -9,
+    right: -20,
     bottom: -20,
   },
   heroImageAlt: {
-    right: 14,
+    right: -20,
     bottom: -22,
   },
   heroImageBoy: {
-    right: 2,
+    right: -20,
     bottom: -24,
   },
   primaryBtn: {
     width: '100%',
-    backgroundColor: colors.navy,
-    borderRadius: radius.pill,
-    paddingVertical: 16,
+    height: 56,
+    backgroundColor: colors.navyDeep,
+    borderRadius: 80,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   primaryBtnText: {
     color: colors.white,
     fontFamily: fonts.medium,
     fontSize: 16,
+    letterSpacing: -0.18,
   },
   secondaryBtn: {
     width: '100%',
-    borderRadius: radius.pill,
-    paddingVertical: 16,
+    height: 56,
+    borderRadius: 80,
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: spacing.md,
-    borderWidth: 1.5,
-    borderColor: colors.border,
+    borderWidth: 1,
+    borderColor: colors.navyDeep,
+    backgroundColor: colors.white,
   },
   secondaryBtnText: {
-    color: colors.navy,
+    color: colors.navyDeep,
     fontFamily: fonts.medium,
     fontSize: 16,
+    letterSpacing: -0.18,
   },
 });
